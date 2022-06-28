@@ -16,4 +16,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::namespace('\App\Http\Controllers\Api')->group(function () {
     Route::apiResource('products', 'ProductController')->except('create', 'show', 'edit');
+    Route::apiResource('categories', 'CategoryController')->except('create', 'show', 'edit', 'update');
 });
