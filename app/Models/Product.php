@@ -18,4 +18,8 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'price', 'is_published', 'is_deleted'];
+
+    public function categories() {
+        return $this->belongsToMany(Category::class, 'categories_products')->using(CategoryProduct::class);
+    }
 }
