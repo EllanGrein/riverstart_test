@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Filters\ProductFilter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,11 +13,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $price
  * @property bool $is_published
  * @property bool $is_deleted
- * @method
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Product filter(\App\Http\Requests\ProductListRequest $request)
  */
 class Product extends Model
 {
     use HasFactory;
+    use ProductFilter;
 
     protected $fillable = ['name', 'price', 'is_published', 'is_deleted'];
 
