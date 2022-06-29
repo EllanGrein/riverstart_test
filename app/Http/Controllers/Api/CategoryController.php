@@ -6,11 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Http\Resources\Category\CategoryResource;
 use App\Models\Category;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class CategoryController extends Controller
 {
-    public function store(CategoryRequest $request)
+    public function store(CategoryRequest $request): JsonResponse
     {
         $params = $request->validated();
 
@@ -22,13 +22,21 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function destroy(Category $category)
+    public function destroy(int $id): JsonResponse
     {
-        $category->delete();
+        $category = Category::find($id);
 
-        return response()->json([
-            'status' => 'deleted',
-            'category' => new CategoryResource($category)
-        ]);
+        if ($category) {
+            if ($category->products()->exists()) {
+                $response = ['message' => 'Невозможно удалить категорию, относящуюся хотя бы к одному товару.'];
+            } else {
+                $category->delete();
+                $response = ['status' => 'deleted', 'category' => new CategoryResource($category)];
+            }
+        } else {
+            $response = ['message' => 'Категория не найдена'];
+        }
+
+        return response()->json($response);
     }
 }

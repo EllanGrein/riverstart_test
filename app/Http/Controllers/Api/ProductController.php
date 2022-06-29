@@ -54,13 +54,17 @@ class ProductController extends Controller
         ]);
     }
 
-    public function destroy(Product $product): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
-        $product->update(['is_deleted' => 1]);
+        $product = Product::find($id);
 
-        return response()->json([
-            'status' => 'deleted',
-            'product' => new ProductResource($product)
-        ]);
+        if ($product) {
+            $product->update(['is_deleted' => 1]);
+            $response = ['status' => 'marked as deleted', 'product' => new ProductResource($product)];
+        } else {
+            $response = ['message' => 'Товар не найден'];
+        }
+
+        return response()->json($response);
     }
 }
