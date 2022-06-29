@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * Модель категории
@@ -16,7 +17,12 @@ class Category extends Model
 
     protected $fillable = ['name'];
 
-    public function products()
+    /**
+     * Связь с товарами
+     *
+     * @return BelongsToMany
+     */
+    public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'categories_products')->using(CategoryProduct::class);
     }
