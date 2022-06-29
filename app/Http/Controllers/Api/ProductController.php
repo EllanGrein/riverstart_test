@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\Product\ProductCollection;
 use App\Http\Resources\Product\ProductResource;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 
@@ -24,8 +25,12 @@ class ProductController extends Controller
     {
         $params = $request->validated();
 
-        $product = Product::create($params);
-        // @TODO Когда появятся категории - ввести ограничение на количество категорий от 2х до 10
+        $product = Product::create([
+            'name' => $params['name'],
+            'price' => $params['price'],
+        ]);
+
+        $product->setCategories($params['categories']);
 
         return response()->json([
             'status' => 'created',

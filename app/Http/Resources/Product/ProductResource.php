@@ -21,7 +21,10 @@ class ProductResource extends JsonResource
             'is_published' => $this->is_published,
             'is_deleted' => $this->is_deleted,
             'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
+            'updated_at' => $this->updated_at,
+            'relationships' => [
+                'categories' => $this->categories
+            ]
         ];
     }
 }
