@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\Product\ProductCollection;
 use App\Http\Resources\Product\ProductResource;
-use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 
@@ -42,7 +41,12 @@ class ProductController extends Controller
     {
         $params = $request->validated();
 
-        $product->update($params);
+        $product->update([
+            'name' => $params['name'],
+            'price' => $params['price'],
+        ]);
+
+        $product->updateCategories($params['categories']);
 
         return response()->json([
             'status' => 'updated',

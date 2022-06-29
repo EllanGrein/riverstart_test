@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\ExistsByArrayOfIds;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ProductRequest extends FormRequest
@@ -18,11 +19,12 @@ class ProductRequest extends FormRequest
             'price' => 'required|numeric|gt:0',
             'is_published' => 'nullable|boolean',
             'is_deleted' => 'nullable|boolean',
-            'categories' => 'required|array|between:2,10',
+            'categories' => ['required','array','between:2,10', new ExistsByArrayOfIds()],
         ];
     }
 
-    public function messages(){
+    public function messages()
+    {
         return [
             'name.required' => 'Название товара обязательно',
             'name.max' => 'Максимальное значение для названия товара - 255 символов',

@@ -20,12 +20,18 @@ class Product extends Model
 
     protected $fillable = ['name', 'price', 'is_published', 'is_deleted'];
 
+    protected $attributes = [
+        'is_published' => 1,
+        'is_deleted' => 0,
+    ];
+
     /**
      * Связь с категориями
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function categories() {
+    public function categories()
+    {
         return $this->belongsToMany(Category::class, 'categories_products')->using(CategoryProduct::class);
     }
 
@@ -42,5 +48,17 @@ class Product extends Model
         }
 
         $this->categories()->sync($categoryIds);
+    }
+
+    /**
+     * Обновление связей модели товара с категорями
+     *
+     * @param array $categories (должен содержать массив с id новых категорий)
+     * @return void
+     */
+    public function updateCategories(array $categories)
+    {
+        $this->categories()->detach();
+        $this->setCategories($categories);
     }
 }
